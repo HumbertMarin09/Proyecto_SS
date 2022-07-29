@@ -1,0 +1,211 @@
+<div *ngIf="authSvc.user$ | async as user">
+  <p class="container">¡Bienvenida, {{ user?.username || "usuaria" }}!</p>
+  <br /><br />
+
+  <div class="table-button-row">
+    <button
+      (click)="onOpenModal()"
+      mat-flat-button
+      color="primary"
+      class="btn-new"
+    >
+      Llenar nuevo formulario
+    </button>
+    <h1 class="cantidad">
+      Hay un total de {{ dataSource.data.length }} registros.
+    </h1>
+  </div>
+
+  <section [formGroup]="myGroup" class="search__container">
+    <div class="search__name">
+      <input
+        type="text"
+        placeholder="Buscar..."
+        formControlName="buscador"
+        (ngModelChange)="filtrar()"
+        class="search__input"
+      />
+    </div>
+
+    <mat-form-field class="option-container">
+      <mat-label>Selecciona el filtro para el buscador...</mat-label>
+      <mat-select formControlName="busca" (ngModelChange)="filtro()">
+        <mat-option value="folio">Por folio</mat-option>
+        <mat-option value="nombre">Por nombre</mat-option>
+        <mat-option value="edad">Por edad</mat-option>
+        <mat-option value="sexo">Por sexo</mat-option>
+        <mat-option value="est_civil">Por estado civil</mat-option>
+        <mat-option value="colonia">Por colonia</mat-option>
+        <mat-option value="cuant_menores">Por hijos menores de edad</mat-option>
+        <mat-option value="sit_economica">Por situación económica</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="search__name">
+      <input
+        type="text"
+        placeholder="Buscar..."
+        formControlName="buscador2"
+        (ngModelChange)="filtrar2()"
+        class="search__input"
+      />
+    </div>
+
+    <mat-form-field class="option-container_dos">
+      <mat-label>Selecciona el filtro para el buscador...</mat-label>
+      <mat-select formControlName="busca2" (ngModelChange)="filtro2()">
+        <mat-option value="folio">Por folio</mat-option>
+        <mat-option value="nombre">Por nombre</mat-option>
+        <mat-option value="edad">Por edad</mat-option>
+        <mat-option value="sexo">Por sexo</mat-option>
+        <mat-option value="est_civil">Por estado civil</mat-option>
+        <mat-option value="colonia">Por colonia</mat-option>
+        <mat-option value="cuant_menores">Por hijos menores de edad</mat-option>
+        <mat-option value="sit_economica">Por situación económica</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <section [formGroup]="myGroup" class="search__container">
+    <div class="search__name">
+      <input
+        type="text"
+        placeholder="Buscar..."
+        formControlName="buscador3"
+        (ngModelChange)="filtrar3()"
+        class="search__input"
+      />
+    </div>
+
+    <mat-form-field class="option-container">
+      <mat-label>Selecciona el filtro para el buscador...</mat-label>
+      <mat-select formControlName="busca3" (ngModelChange)="filtro3()">
+        <mat-option value="folio">Por folio</mat-option>
+        <mat-option value="nombre">Por nombre</mat-option>
+        <mat-option value="edad">Por edad</mat-option>
+        <mat-option value="sexo">Por sexo</mat-option>
+        <mat-option value="est_civil">Por estado civil</mat-option>
+        <mat-option value="colonia">Por colonia</mat-option>
+        <mat-option value="cuant_menores">Por hijos menores de edad</mat-option>
+        <mat-option value="sit_economica">Por situación económica</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="search__name">
+      <input
+        type="text"
+        placeholder="Buscar..."
+        formControlName="buscador4"
+        (ngModelChange)="filtrar4()"
+        class="search__input"
+      />
+    </div>
+
+    <mat-form-field class="option-container_dos">
+      <mat-label>Selecciona el filtro para el buscador...</mat-label>
+      <mat-select formControlName="busca4" (ngModelChange)="filtro4()">
+        <mat-option value="folio">Por folio</mat-option>
+        <mat-option value="nombre">Por nombre</mat-option>
+        <mat-option value="edad">Por edad</mat-option>
+        <mat-option value="sexo">Por sexo</mat-option>
+        <mat-option value="est_civil">Por estado civil</mat-option>
+        <mat-option value="colonia">Por colonia</mat-option>
+        <mat-option value="cuant_menores">Por hijos menores de edad</mat-option>
+        <mat-option value="sit_economica">Por situación económica</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Columna de Folio -->
+    <ng-container matColumnDef="folio">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>
+      <td mat-cell *matCellDef="let element">{{ element.folio }}</td>
+    </ng-container>
+
+    <!-- Columna de Nombre -->
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre(s)</th>
+      <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+    </ng-container>
+
+    <!-- Columna de Apellidos -->
+    <ng-container matColumnDef="apellido">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellidos</th>
+      <td mat-cell *matCellDef="let element">{{ element.apellido }}</td>
+    </ng-container>
+
+    <!-- Columna de Edad -->
+    <ng-container matColumnDef="edad">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Edad</th>
+      <td mat-cell *matCellDef="let element">{{ element.edad }}</td>
+    </ng-container>
+
+    <!-- Columna de Sexo -->
+    <ng-container matColumnDef="sexo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Sexo</th>
+      <td mat-cell *matCellDef="let element">{{ element.sexo }}</td>
+    </ng-container>
+
+    <!-- Columna de Edad -->
+    <ng-container matColumnDef="est_civil">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Civil</th>
+      <td mat-cell *matCellDef="let element">{{ element.est_civil }}</td>
+    </ng-container>
+
+    <!-- Columna de Telefono -->
+    <ng-container matColumnDef="telefono">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</th>
+      <td mat-cell *matCellDef="let element">{{ element.telefono }}</td>
+    </ng-container>
+
+    <!-- Columna de Hijos -->
+    <ng-container matColumnDef="cuant_menores">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Hijos menores de edad
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.cuant_menores }}</td>
+    </ng-container>
+
+    <!-- Columna de Colonia -->
+    <ng-container matColumnDef="colonia">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Colonia</th>
+      <td mat-cell *matCellDef="let element">{{ element.colonia }}</td>
+    </ng-container>
+
+    <!-- Columna de Diagnóstico -->
+    <ng-container matColumnDef="sit_economica">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Situación Económica
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.sit_economica }}</td>
+    </ng-container>
+
+    <!-- Columna de acciones -->
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Acciones</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="table-button-row">
+          <button
+            mat-flat-button
+            color="accent"
+            (click)="onOpenModal(element)"
+          >
+            Editar
+          </button>
+          <!-- *ngIf="isAdmin === 'admin'" -->
+          <!-- <button
+            mat-flat-button
+            color="warn"
+            (click)="onDelete(element.folio)"
+          >
+            Eliminar
+          </button> -->
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

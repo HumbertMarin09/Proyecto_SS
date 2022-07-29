@@ -1,0 +1,13 @@
+<!-- Este es el componente padre de la parte visual -->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+    <mat-toolbar color="primary">Menú</mat-toolbar>
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+    <!-- Con el toggleSidenv haremos la referencia a que usaremos una barra de navegación lateral, hace la comunicación con la función del header -->
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>

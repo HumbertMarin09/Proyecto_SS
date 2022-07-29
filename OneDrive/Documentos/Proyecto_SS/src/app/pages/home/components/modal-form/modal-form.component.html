@@ -1,0 +1,968 @@
+<h1 mat-dialog-title class="separacion">{{ data?.title }}</h1>
+<mat-dialog-content>
+  <div class="modal-form">
+    <form [formGroup]="formForm.baseForm" method="POST" method="post" action="/file" enctype="multipart/form-data">
+      <h2 mat-dialog-title>Datos personales</h2>
+      <mat-form-field class="name-container">
+        <input
+          formControlName="nombre"
+          matInput
+          placeholder="Nombre(s)"
+          required
+        />
+        <mat-error *ngIf="checkField('nombre')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="name-container">
+        <input
+          formControlName="apellido"
+          matInput
+          placeholder="Apellidos"
+          required
+        />
+        <mat-error *ngIf="checkField('apellido')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="container-dos">
+        <img class="img-preview" [src]="imgURL" height="200" *ngIf="imgURL" />
+      </div>
+      <br />
+      <mat-form-field class="spacer">
+        <input
+          type="date"
+          min="1960-01-01"
+          [max]="res"
+          formControlName="fecha_nac"
+          matInput
+          placeholder="Fecha de Nacimiento"
+          required
+        />
+        <mat-error *ngIf="checkField('fecha_nac')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="spacer">
+        <input
+          formControlName="edad"
+          matInput
+          placeholder="Edad"
+          [ngModel]="CalculateAge()"
+          required
+          readonly
+        />
+        <mat-error *ngIf="checkField('edad')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="container">
+        <label>Agrega una foto: </label>
+        <input
+          type="file"
+          name="file"
+          class="form-control"
+          formControlName="foto"
+          accept="image/*"
+          (change)="preview(file.files)"
+          (input)="fileChoosen($event)"
+          #file
+          id="formFile"
+          required
+        />
+        <mat-error *ngIf="checkField('foto')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </div>
+      <mat-form-field class="option-container">
+        <mat-label>Sexo</mat-label>
+        <mat-select formControlName="sexo">
+          <mat-option value="Mujer">Mujer</mat-option>
+          <mat-option value="Hombre">Hombre</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('sexo')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="domicilio-camp">
+        <input
+          matInput
+          formControlName="telefono"
+          placeholder="Teléfono"
+          required
+        />
+        <mat-error *ngIf="checkField('telefono')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container">
+        <mat-label>Estado civil</mat-label>
+        <mat-select formControlName="est_civil">
+          <mat-option value="Soltera">Soltera</mat-option>
+          <mat-option value="Soltero">Soltero</mat-option>
+          <mat-option value="Madre soltera">Madre soltera</mat-option>
+          <mat-option value="Padre soltero">Padre soltero</mat-option>
+          <mat-option value="Casada">Casada</mat-option>
+          <mat-option value="Casado">Casado</mat-option>
+          <mat-option value="Divorciada">Divorciada</mat-option>
+          <mat-option value="Divorciado">Divorciado</mat-option>
+          <mat-option value="Viuda">Viuda</mat-option>
+          <mat-option value="Viudo">Viudo</mat-option>
+          <mat-option value="Union libre">Unión libre</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('est_civil')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container">
+        <input
+          type="date"
+          formControlName="vigencia"
+          matInput
+          placeholder="Vigencia de la credencial"
+          required
+        />
+        <mat-error *ngIf="checkField('vigencia')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <h2 mat-dialog-title class="separacion-dos">Datos relacionados</h2>
+      <mat-form-field class="option-container">
+        <mat-label>Escolaridad</mat-label>
+        <mat-select
+          formControlName="escolaridad"
+          (ngModelChange)="escolaridad()"
+        >
+          <mat-option value="Primaria trunca">Primaria trunca</mat-option>
+          <mat-option value="Primaria terminada">Primaria terminada</mat-option>
+          <mat-option value="Secundaria trunca">Secundaria trunca</mat-option>
+          <mat-option value="Secundaria terminada"
+            >Secundaria terminada</mat-option
+          >
+          <mat-option value="Bachillerato trunco"
+            >Bachillerato trunca</mat-option
+          >
+          <mat-option value="Bachillerato terminado"
+            >Bachillerato terminada</mat-option
+          >
+          <mat-option value="Licenciatura trunca"
+            >Licenciatura trunca</mat-option
+          >
+          <mat-option value="Licenciatura terminada"
+            >Licenciatura terminada</mat-option
+          >
+          <mat-option value="Posgrado">Posgrado</mat-option>
+          <mat-option value="Sin estudios">Sin estudios</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('escolaridad')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="ocultos option-container" [hidden]="val1">
+        <mat-form-field class="spacer-dos">
+          <mat-label>¿Motivo por el que dejó la escuela?</mat-label>
+          <mat-select
+            formControlName="mot_escolaridad"
+            (ngModelChange)="mot_escolaridad()"
+          >
+            <mat-option value="No alcanzó el dinero para continuar"
+              >No alcanzó el dinero para continuar</mat-option
+            >
+            <mat-option value="Se necesitó ayuda en el trabajo o la casa"
+              >Se necesitó ayuda en el trabajo o la casa</mat-option
+            >
+            <mat-option value="Tuvo que quedarse en casa para cuidar niños pequeños"
+              >Tuvo que quedarse en casa para cuidar niños
+              pequeños</mat-option
+            >
+            <mat-option value="Decidió empezar a trabajar"
+              >Decidió empezar a trabajar</mat-option
+            >
+            <mat-option value="No le gustó la escuela"
+              >No le gustó la escuela</mat-option
+            >
+            <mat-option value="No había escuela donde vivía o estaba muy lejos"
+              >No había escuela donde vivía o estaba muy lejos</mat-option
+            >
+            <mat-option value="Eran muchos hermanos y no pudieron estudiar más"
+              >Eran muchos hermanos y no pudieron estudiar más</mat-option
+            >
+            <mat-option value="Nunca ha ido a la escuela"
+              >Nunca ha ido a la escuela</mat-option
+            >
+            <mat-option value="Otra causa">Otra causa</mat-option>
+          </mat-select>
+          <mat-error *ngIf="checkField('mot_escolaridad')">
+            {{ formForm.errorMessage }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="ocultos option-container" [hidden]="val2">
+        <mat-form-field class="spacer-dos">
+          <input
+            formControlName="otro_escuela"
+            matInput
+            placeholder="Explica el motivo"
+          />
+          <mat-error *ngIf="checkField('otro_escuela')">
+            {{ formForm.errorMessage }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="option-container">
+        <mat-label>Ocupacion</mat-label>
+        <mat-select formControlName="ocupacion">
+          <mat-option value="Ama de casa">Ama de casa</mat-option>
+          <mat-option value="Amo de casa">Amo de casa</mat-option>
+          <mat-option value="Empleada">Empleada</mat-option>
+          <mat-option value="Empleado">Empleado</mat-option>
+          <mat-option value="Autoempleo">Autoempleo</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('ocupacion')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container">
+        <mat-label>¿Sabe firmar?</mat-label>
+        <mat-select formControlName="firma">
+          <mat-option value="Si">SI</mat-option>
+          <mat-option value="No">NO</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('firma')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container">
+        <mat-label>¿Sabe leer y escribir?</mat-label>
+        <mat-select formControlName="leer_escribir">
+          <mat-option value="Si">SI</mat-option>
+          <mat-option value="No">NO</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('leer_escribir')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container spacer-tres">
+        <mat-label>¿Habla alguna lengua originaria?</mat-label>
+        <mat-select formControlName="lengua" (ngModelChange)="lengua()">
+          <mat-option value="Si">SI</mat-option>
+          <mat-option value="No">NO</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('lengua')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="ocultos option-container" [hidden]="val3">
+        <mat-form-field>
+          <input
+            formControlName="cual_lengua"
+            matInput
+            placeholder="¿Cuál lengua hablas?"
+          />
+          <mat-error *ngIf="checkField('cual_lengua')">
+            {{ formForm.errorMessage }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="option-container spacer-tres">
+        <mat-label>¿Padece alguna enfermedad?</mat-label>
+        <mat-select formControlName="enfermedad" (ngModelChange)="enfermedad()">
+          <mat-option value="Si">SI</mat-option>
+          <mat-option value="No">NO</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('enfermedad')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="ocultos option-container" [hidden]="val4">
+        <mat-form-field>
+          <input
+            formControlName="cual_enfermedad"
+            matInput
+            placeholder="¿De qué enfermedad padeces?"
+          />
+          <mat-error *ngIf="checkField('cual_enfermedad')">
+            {{ formForm.errorMessage }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="option-container">
+        <mat-label>Prestaciones</mat-label>
+        <mat-select formControlName="prestaciones">
+          <mat-option value="IMSS">IMSS</mat-option>
+          <mat-option value="ISSSTE">ISSSTE</mat-option>
+          <mat-option value="ISSTECH">ISSTECH</mat-option>
+          <mat-option value="Ninguno">Ninguno</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('prestaciones')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container">
+        <mat-label>¿Tiene hijos?</mat-label>
+        <mat-select formControlName="hijos" (ngModelChange)="hijos()">
+          <mat-option value="Si">SI</mat-option>
+          <mat-option value="No">NO</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('hijos')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="ocultos option-container" [hidden]="val5">
+        <mat-form-field>
+          <input
+            matInput
+            formControlName="cuant_hijos"
+            placeholder="¿Cuántos hijos tiene?"
+          />
+          <mat-error *ngIf="checkField('cuant_hijos')">
+            {{ formForm.errorMessage }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="ocultos option-container" [hidden]="val5">
+        <mat-form-field>
+          <input
+            (ngModelChange)="hijos_number()"
+            matInput
+            formControlName="cuant_menores"
+            placeholder="¿Cuántos menores de edad?"
+          />
+          <mat-error *ngIf="checkField('cuant_menores')">
+            {{ formForm.errorMessage }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <h2 mat-dialog-title class="separacion-dos">Domicilio</h2>
+      <mat-form-field class="domicilio-camp">
+        <input
+          matInput
+          formControlName="cp"
+          placeholder="Código postal"
+          #cp
+          (keypress)="getDomi($event, cp.value)"
+        />
+        <mat-error *ngIf="checkField('cp')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="domicilio-camp-dos">
+        <input
+          matInput
+          formControlName="calle"
+          placeholder="Calle y número"
+        />
+        <mat-error *ngIf="checkField('calle')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width domicilio-camp" appearance="fill">
+        <mat-label>Colonia</mat-label>
+        <input
+          type="text"
+          placeholder="Selecciona una"
+          aria-label="Colonia"
+          matInput
+          formControlName="colonia"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="checkField('colonia')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="domicilio-camp">
+        <input
+          matInput
+          formControlName="municipio"
+          placeholder="Municipio"
+          [ngModel]="muni"
+          readonly
+        />
+        <mat-error *ngIf="checkField('municipio')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <h2 mat-dialog-title class="separacion-dos">Vivienda</h2>
+      <mat-form-field class="spacer-tres">
+        <mat-label>La Vivienda que habita es:</mat-label>
+        <mat-select formControlName="vivienda" (ngModelChange)="vivienda()">
+          <mat-option value="Propia y totalmente pagada"
+            >Propia y totalmente pagada</mat-option
+          >
+          <mat-option value="Propia y la estoy pagando"
+            >Propia y la estoy pagando</mat-option
+          >
+          <mat-option value="Propia y está hipotecada"
+            >Propia y está hipotecada</mat-option
+          >
+          <mat-option value="Rentada o alquilada">Rentada o alquilada</mat-option>
+          <mat-option value="Prestada y la está cuidando"
+            >Prestada y la está cuidando</mat-option
+          >
+          <mat-option value="Intestada y está en litigio"
+            >Intestada y está en litigio</mat-option
+          >
+          <mat-option value="Otro">Otro</mat-option>
+          <mat-option value="No sabe">No sabe</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('vivienda')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="ocultos option-container" [hidden]="val6">
+        <mat-form-field class="spacer-dos">
+          <input
+            formControlName="otro_vivienda"
+            matInput
+            placeholder="Explica el motivo"
+          />
+          <mat-error *ngIf="checkField('otro_vivienda')">
+            {{ formForm.errorMessage }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="spacer-cuatro">
+        <mat-label
+          >¿De qué material esta hecho la mayor parte del techo de su
+          vivienda?</mat-label
+        >
+        <mat-select formControlName="techo">
+          <mat-option value="Material de desecho">Material de desecho</mat-option>
+          <mat-option value="Lámina de cartón">Lámina de cartón</mat-option>
+          <mat-option value="Lámina metálica">Lámina metálica</mat-option>
+          <mat-option value="Lámina de asbesto">Lámina de asbesto</mat-option>
+          <mat-option value="Madera o tejamanil">Madera o tejamanil</mat-option>
+          <mat-option value="Palma o paja">Palma o paja</mat-option>
+          <mat-option value="Terrado con viguería">Terrado con viguería</mat-option>
+          <mat-option value="Teja">Teja</mat-option>
+          <mat-option value="Losa de concreto o viguetas con bovedilla"
+            >Losa de concreto o viguetas con bovedilla</mat-option
+          >
+        </mat-select>
+        <mat-error *ngIf="checkField('techo')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="spacer-cuatro">
+        <mat-label
+          >¿De qué material son la mayoría de los muros de su
+          vivienda?</mat-label
+        >
+        <mat-select formControlName="muros">
+          <mat-option value="Material de desecho">Material de desecho</mat-option>
+          <mat-option value="Lámina de cartón">Lámina de cartón</mat-option>
+          <mat-option value="Lámina metálica o de asbesto"
+            >Lámina metálica o de asbesto</mat-option
+          >
+          <mat-option value="Carrizo, bambú o palma"
+            >Carrizo, bambú o palma</mat-option
+          >
+          <mat-option value="Embarro o bajareque">Embarro o bajareque</mat-option>
+          <mat-option value="Madera">Madera</mat-option>
+          <mat-option value="Adobe">Adobe</mat-option>
+          <mat-option value="Tabique, block, ladrillo, piedra o concreto"
+            >Tabique, block, ladrillo, piedra o concreto</mat-option
+          >
+        </mat-select>
+        <mat-error *ngIf="checkField('muros')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="spacer-cuatro">
+        <mat-label
+          >¿Qué tipo de drenaje o desagüe de aguas sucias tiene su
+          vivienda?</mat-label
+        >
+        <mat-select formControlName="dren_des">
+          <mat-option value="A la red pública">A la red pública</mat-option>
+          <mat-option value="A una fosa séptica">A una fosa séptica</mat-option>
+          <mat-option value="A una tubería que da a una grieta o a una barranca"
+            >A una tubería que da a una grieta o a una barranca</mat-option
+          >
+          <mat-option value="A una tubería que da a un río, lago o mar"
+            >A una tubería que da a un río, lago o mar</mat-option
+          >
+          <mat-option value="No tiene desagüe ni drenaje">No tiene desagüe ni drenaje</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('dren_des')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="spacer-cinco">
+        <mat-label
+          >¿Con qué cocina?</mat-label
+        >
+        <mat-select formControlName="cocina">
+          <mat-option value="Gas">Gas</mat-option>
+          <mat-option value="Leña">Leña</mat-option>
+          <mat-option value="Electricidad"
+            >Electricidad</mat-option
+          >
+        </mat-select>
+        <mat-error *ngIf="checkField('cocina')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="spacer-tres">
+        <mat-label>Número de dormitorios</mat-label>
+        <mat-select formControlName="cuartos">
+          <mat-option value="Vivienda con 1 dormitorio">Vivienda con 1 dormitorio</mat-option>
+          <mat-option value="Vivienda con 2 dormitorios"
+            >Vivienda con 2 dormitorios</mat-option
+          >
+          <mat-option value="Vivienda con 3 dormitorios"
+            >Vivienda con 3 dormitorios</mat-option
+          >
+          <mat-option value="Vivienda con 4 dormitorios o más"
+            >Vivienda con 4 dormitorios o más</mat-option
+          >
+        </mat-select>
+        <mat-error *ngIf="checkField('cuartos')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <h2 mat-dialog-title class="separacion-dos">
+        Ingresos (SOLO PONER LOS QUE SE APLICAN)
+      </h2>
+      <mat-form-field class="total">
+        <input
+          formControlName="total_ing"
+          matInput
+          placeholder="Total de los ingresos"
+          [ngModel]="total_ing()"
+          readonly
+        />
+        <mat-error *ngIf="checkField('total_ing')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-dos">
+        <input
+          type="number"
+          formControlName="ing_esposo"
+          matInput
+          placeholder="Ingresos del esposo"
+        />
+        <mat-error *ngIf="checkField('ing_esposo')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-dos">
+        <input
+          type="number"
+          formControlName="ing_esposa"
+          matInput
+          placeholder="Ingresos de la esposa"
+        />
+        <mat-error *ngIf="checkField('ing_esposa')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-tres">
+        <input
+          type="number"
+          formControlName="ing_hijos"
+          matInput
+          placeholder="Ingresos de los hijos *Solo el total*"
+        />
+        <mat-error *ngIf="checkField('ing_hijos')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-cuatro">
+        <input
+          type="number"
+          formControlName="ing_programa"
+          matInput
+          placeholder="Ingresos del programa al que esta afiliada"
+        />
+        <mat-error *ngIf="checkField('ing_programa')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-dos">
+        <input
+          type="number"
+          formControlName="ing_pension"
+          matInput
+          placeholder="Ingresos de la pensión"
+        />
+        <mat-error *ngIf="checkField('ing_pension')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <h2 mat-dialog-title class="separacion-dos">
+        Egresos (SOLO PONER LOS QUE SE APLICAN)
+      </h2>
+      <mat-form-field class="total">
+        <input
+          formControlName="total_egr"
+          matInput
+          placeholder="Total de los egresos"
+          [ngModel]="total_egr()"
+          readonly
+        />
+        <mat-error *ngIf="checkField('total_egr')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-cinco">
+        <input
+          type="number"
+          formControlName="egr_alimentacion"
+          matInput
+          placeholder="Gastos en alimentación"
+        />
+        <mat-error *ngIf="checkField('egr_alimentacion')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-seis">
+        <input
+          type="number"
+          formControlName="egr_renta"
+          matInput
+          placeholder="Gastos de renta"
+        />
+        <mat-error *ngIf="checkField('egr_renta')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-siete">
+        <input
+          type="number"
+          formControlName="egr_predial"
+          matInput
+          placeholder="Gastos en predial"
+        />
+        <mat-error *ngIf="checkField('egr_predial')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-siete">
+        <input
+          type="number"
+          formControlName="egr_agua"
+          matInput
+          placeholder="Gastos de agua"
+        />
+        <mat-error *ngIf="checkField('egr_agua')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-siete">
+        <input
+          type="number"
+          formControlName="egr_luz"
+          matInput
+          placeholder="Gastos de luz"
+        />
+        <mat-error *ngIf="checkField('egr_luz')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-dos">
+        <input
+          type="number"
+          formControlName="egr_gas_lena"
+          matInput
+          placeholder="Gastos de gas o leña"
+        />
+        <mat-error *ngIf="checkField('egr_gas_lena')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-dos">
+        <input
+          type="number"
+          formControlName="egr_transporte"
+          matInput
+          placeholder="Gastos en transporte"
+        />
+        <mat-error *ngIf="checkField('egr_transporte')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-dos">
+        <input
+          type="number"
+          formControlName="egr_educacion"
+          matInput
+          placeholder="Gastos en educación"
+        />
+        <mat-error *ngIf="checkField('egr_educacion')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-cinco">
+        <input
+          type="number"
+          formControlName="egr_medicamentos"
+          matInput
+          placeholder="Gastos en medicamentos"
+        />
+        <mat-error *ngIf="checkField('egr_medicamentos')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-cinco">
+        <input
+          type="number"
+          formControlName="egr_ropa_zap"
+          matInput
+          placeholder="Gastos en ropa y zapatos"
+        />
+        <mat-error *ngIf="checkField('egr_ropa_zap')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-cinco">
+        <input
+          type="number"
+          formControlName="egr_entretenimiento"
+          matInput
+          placeholder="Gastos en entretenimiento"
+        />
+        <mat-error *ngIf="checkField('egr_entretenimiento')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="option-container-ocho">
+        <input
+          type="number"
+          formControlName="egr_serv_digitales"
+          matInput
+          placeholder="Gastos en servicios digitales"
+        />
+        <mat-error *ngIf="checkField('egr_serv_digitales')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <h2 mat-dialog-title class="separacion-dos">
+        Diferencia (Ingresos menos Egresos)
+      </h2>
+      <mat-form-field class="diferencia">
+        <input
+          formControlName="diferencia_ing_egr"
+          matInput
+          placeholder="Aquí se muestra la diferencia"
+          [ngModel]="diferencia_ing_egr()"
+          readonly
+        />
+        <mat-error *ngIf="checkField('diferencia_ing_egr')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <h2 mat-dialog-title class="separacion-dos">Situación Económica</h2>
+      <mat-form-field class="diferencia">
+        <mat-label>Elige entre estas opciones</mat-label>
+        <mat-select formControlName="sit_economica">
+          <mat-option value="Indigencia">Indigencia</mat-option>
+          <mat-option value="Deficit">Déficit</mat-option>
+          <mat-option value="Equilibrio">Equilibrio</mat-option>
+          <mat-option value="Solvente">Solvente</mat-option>
+          <mat-option value="Excedente">Excedente</mat-option>
+        </mat-select>
+        <mat-error *ngIf="checkField('sit_economica')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <h2 mat-dialog-title class="separacion-dos">Diagnóstico</h2>
+      <mat-form-field class="full-width-container">
+        <input
+          formControlName="diagnostico"
+          matInput
+          placeholder="En este espacio la trabajadora social explica la situación en la que se encuentra la usuaria."
+        />
+        <mat-error *ngIf="checkField('diagnostico')">
+          {{ formForm.errorMessage }}
+        </mat-error>
+      </mat-form-field>
+      <div class="ocultos option-container" [hidden]="val7">
+        <div *ngFor="let hijos of ch; let i = index">
+          <div [formGroup]="menorInto[i]">
+            <h2 mat-dialog-title class="separacion-dos">Menores {{ i + 1 }}</h2>
+            <mat-form-field class="option-container">
+              <mat-label>Sexo del hijo/a</mat-label>
+              <mat-select formControlName="sexo_hijo">
+                <mat-option value="Mujer">Mujer</mat-option>
+                <mat-option value="Hombre">Hombre</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="spacer">
+              <input
+                type="date"
+                min="1960-01-01"
+                [max]="res"
+                formControlName="fecha_nac_hijo"
+                matInput
+                placeholder="Fecha de nacimiento del hijo/a"
+                (ngModelChange)="CalculaEdad(i)"
+                id="fechaID-{{ i }}"
+              />
+            </mat-form-field>
+            <mat-form-field class="spacer">
+              <input
+                formControlName="edad_hijo"
+                matInput
+                placeholder="Edad del hijo/a"
+                readonly
+                id="edad-{{ i }}"
+              />
+            </mat-form-field>
+            <mat-form-field class="option-container">
+              <mat-label>¿Estudia?</mat-label>
+              <mat-select
+                formControlName="estudia_hijo"
+                (ngModelChange)="estudia_hijo()"
+              >
+                <mat-option value="Si">SI</mat-option>
+                <mat-option value="No">NO</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="ocultos option-container" id="nivel_{{i}}" style="display: none;">
+              <mat-form-field class="option-container-seis">
+                <mat-label>¿Qué nivel?</mat-label>
+                <mat-select formControlName="nivel_hijo">
+                  <mat-option value="Primaria">Primaria</mat-option>
+                  <mat-option value="Secundaria">Secundaria</mat-option>
+                  <mat-option value="Bachillerato"
+                    >Bachillerato</mat-option
+                  >
+                  <mat-option value="Universidad">Universidad</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="ocultos option-container" id="noEstudia_{{i}}" style="display: none;">
+              <mat-form-field class=".option-container-cinco">
+                <mat-label>¿Por qué no estudia?</mat-label>
+                <mat-select
+                  formControlName="no_estudia_hijo"
+                  (ngModelChange)="no_estudia_hijo()"
+                >
+                  <mat-option value="Concluyó sus estudios"
+                    >Concluyó sus estudios</mat-option
+                  >
+                  <mat-option value="No alcanzó el dinero para continuar"
+                    >No alcanzó el dinero para continuar</mat-option
+                  >
+                  <mat-option value="Se necesitó ayuda en el trabajo o la casa"
+                    >Se necesitó ayuda en el trabajo o la casa</mat-option
+                  >
+                  <mat-option value="Tuvo que quedarse en casa para cuidar niños pequeños"
+                    >Tuvo que quedarse en casa para cuidar niños
+                    pequeños</mat-option
+                  >
+                  <mat-option value="Decidió empezar a trabajar"
+                    >Decidió empezar a trabajar</mat-option
+                  >
+                  <mat-option value="No le gustó la escuela"
+                    >No le gustó la escuela</mat-option
+                  >
+                  <mat-option value="No había escuela donde vivía o estaba muy lejos"
+                    >No había escuela donde vivía o estaba muy lejos</mat-option
+                  >
+                  <mat-option value="Eran muchos hermanos y no pudieron estudiar más"
+                    >Eran muchos hermanos y no pudieron estudiar más</mat-option
+                  >
+                  <mat-option value="Nunca ha ido a la escuela"
+                    >Nunca ha ido a la escuela</mat-option
+                  >
+                  <mat-option value="Otra causa">Otra causa</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="ocultos option-container" id="otro_{{i}}" style="display: none;">
+              <mat-form-field class="spacer-dos">
+                <input
+                  formControlName="otro_hijo"
+                  matInput
+                  placeholder="Explica el motivo"
+                />
+              </mat-form-field>
+            </div>
+            <div class="ocultos option-container" id="nivel_max_{{i}}" style="display: none;">
+              <mat-form-field class="option-container-cinco">
+                <mat-label>¿Hasta qué nivel estudio?</mat-label>
+                <mat-select formControlName="nivel_max_hijo">
+                  <mat-option value="Primaria trunca"
+                    >Primaria trunca</mat-option
+                  >
+                  <mat-option value="Primaria terminada"
+                    >Primaria terminada</mat-option
+                  >
+                  <mat-option value="Secundaria trunca"
+                    >Secundaria trunca</mat-option
+                  >
+                  <mat-option value="Secundaria terminada"
+                    >Secundaria terminada</mat-option
+                  >
+                  <mat-option value="Bachillerato trunco"
+                    >Bachillerato trunco</mat-option
+                  >
+                  <mat-option value="Bachillerato terminado"
+                    >Bachillerato terminado</mat-option
+                  >
+                  <!-- <mat-option value="licenciatura_trunca_hijo"
+                    >Licenciatura trunca</mat-option
+                  >
+                  <mat-option value="licenciatura_terminada_hijo"
+                    >Licenciatura terminada</mat-option
+                  >
+                  <mat-option value="posgrado_hijo">Posgrado</mat-option> -->
+                  <mat-option value="No estudia">No estudia</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field class="option-container spacer-tres">
+              <mat-label>¿Padece alguna enfermedad?</mat-label>
+              <mat-select
+                formControlName="enfermedad_hijo"
+                (ngModelChange)="enfermedad_hijo()"
+              >
+                <mat-option value="Si">SI</mat-option>
+                <mat-option value="No">NO</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="ocultos option-container" id="cual_{{i}}" style="display: none;">
+              <mat-form-field>
+                <input
+                  formControlName="cual_enfermedad_hijo"
+                  matInput
+                  placeholder="¿De qué enfermedad padece?"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="clean()">Cancelar</button>
+  <button
+    mat-raised-button
+    [mat-dialog-close]="true"
+    color="primary"
+    (click)="onSave()"
+    ckdFocusInitial
+    [disabled]="!formForm.baseForm.valid"
+  >
+    Guardar
+  </button>
+  <button mat-raised-button color="accent" (click)="prueba();">
+    <i class="fa-solid fa-id-card"></i>
+  </button>
+  <button mat-raised-button color="accent" (click)="prueba2();">
+    <i class="fa-solid fa-file"></i>
+  </button>
+</mat-dialog-actions>

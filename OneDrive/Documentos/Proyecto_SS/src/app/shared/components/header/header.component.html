@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <ng-container *ngIf="isAdmin === 'admin'">
+    <!-- Cuando los usuarios tengan el rol de admin, esto es lo que verán: -->
+    <button mat-icon-button (click)="onToggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </ng-container>
+  <a routerLink="/">Ixuk'e DB</a>
+  <span class="spacer"></span>
+  <span *ngIf="isLogged; else viewLogout">
+    <a mat-button routerLink="/change-password">Cambiar contraseña</a>
+    <a mat-button (click)="onLogout()">Cerrar Sesión</a>
+  </span>
+</mat-toolbar>
+
+<ng-template #viewLogout>
+  <a mat-button routerLink="/login">Acceso</a>
+</ng-template>
